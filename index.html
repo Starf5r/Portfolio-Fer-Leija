@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500&family=Spectral:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-main: #FFFFFF;
+    --bg-soft: #FAF7F8;
+    --accent: #cf97a0;
+    --accent-hover: #bc828c;
+    --text-dark: #1A1A1A;
+    --text-muted: #5C5859;
+    --border-light: #EAE3E4;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding: 20px 0 60px 0;
+  }
+
+  h1, h2, h3, h4, .serif {
+    font-family: 'Spectral', serif;
+    font-weight: 300;
+  }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* --- SECCIÓN 1: DEMO REEL DE VOZ --- */
+  .hero-voice {
+    text-align: center;
+    padding: 40px 20px 55px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .hero-voice h2 {
+    font-size: 34px;
+    margin-bottom: 14px;
+    color: var(--text-dark);
+  }
+
+  .hero-voice p {
+    max-width: 640px;
+    margin: 0 auto 30px;
+    font-size: 15px;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* Reproductor de Audio Chic Personalizado */
+  .chic-player {
+    max-width: 540px;
+    margin: 0 auto;
+    background: var(--bg-soft);
+    border: 1px solid var(--border-light);
+    border-radius: 50px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 8px 24px rgba(207, 151, 160, 0.08);
+    transition: transform 0.3s ease;
+  }
+
+  .chic-player:hover {
+    transform: translateY(-2px);
+  }
+
+  .play-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+
+  .play-btn:hover {
+    background-color: var(--accent-hover);
+    transform: scale(1.05);
+  }
+
+  .track-info {
+    flex-grow: 1;
+    text-align: left;
+  }
+
+  .track-title {
+    font-family: 'Spectral', serif;
+    font-size: 16px;
+    color: var(--text-dark);
+    display: block;
+    line-height: 1.2;
+  }
+
+  .track-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .progress-wrap {
+    width: 100%;
+    height: 4px;
+    background: #E5DCDF;
+    border-radius: 4px;
+    margin-top: 8px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.1s linear;
+  }
+
+  .time-display {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- SECCIÓN 2: TRAYECTORIA (CARDS INTERACTIVAS CON POP-UP) --- */
+  .section-block {
+    padding: 60px 0;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .section-header h2 {
+    font-size: 32px;
+  }
+
+  .section-header p {
+    font-size: 14px;
+    color: var(--text-muted);
+    max-width: 420px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+
+  .editorial-card {
+    background: var(--bg-main);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 28px 24px;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .editorial-card:hover {
+    border-color: var(--accent);
+    background: var(--bg-soft);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(207, 151, 160, 0.12);
+  }
+
+  .card-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: inline-block;
+  }
+
+  .editorial-card h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+
+  .editorial-card p {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+
+  .card-cta {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+
+  .card-cta span {
+    color: var(--accent);
+    transition: transform 0.3s ease;
+  }
+
+  .editorial-card:hover .card-cta span {
+    transform: translateX(5px);
+  }
+
+  /* --- SECCIÓN 3: ARCHIVO SONORO & SOUNDCLOUD --- */
+  .radio-archive {
+    background: var(--bg-soft);
+    border-radius: 24px;
+    padding: 48px 40px;
+    border: 1px solid var(--border-light);
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .radio-archive {
+      grid-template-columns: 1fr;
+      padding: 32px 24px;
+    }
+  }
+
+  .radio-text h2 {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .radio-text p {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+
+  .pill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    font-size: 11px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    color: var(--text-dark);
+  }
+
+  .soundcloud-frame {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 12px;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+  }
+
+  /* --- MODAL / POP-UP --- */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(26, 26, 26, 0.5);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  .modal-box {
+    background: #FFFFFF;
+    max-width: 760px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+    transform: translateY(15px);
+    transition: transform 0.3s ease;
+  }
+
+  .modal-overlay.active .modal-box {
+    transform: translateY(0);
+  }
+
+  /* Scrollbar delicado dentro del modal */
+  .modal-box::-webkit-scrollbar {
+    width: 6px;
+  }
+  .modal-box::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 10px;
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border-light);
+    background: var(--bg-soft);
+    color: var(--text-dark);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+
+  .close-modal:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .modal-box h3 {
+    font-size: 30px;
+    margin-bottom: 10px;
+    padding-right: 40px;
+  }
+
+  .modal-desc {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+
+  /* --- CONTENEDORES DE VIDEO INCRUSTADOS DENTRO DEL MODAL --- */
+  .video-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .video-card {
+    background: var(--bg-soft);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .video-card h4 {
+    font-size: 19px;
+    margin-bottom: 4px;
+    color: var(--text-dark);
+  }
+
+  .video-card p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    font-weight: 300;
+  }
+
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* Proporción 16:9 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #1A1A1A;
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Galería de fotos para Orejuetas */
+  .photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .photo-gallery img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- 1. DEMO REEL DE VOZ CON REPRODUCTOR CHIC -->
+  <section class="hero-voice">
+    <span class="eyebrow">Voz · Presencia · Producción</span>
+    <h2>Demo Oficial de Locución</h2>
+    <p>Comunicar con voz, emoción y presencia es lo que me apasiona. Explora mi rango vocal para comerciales, narración, radio en vivo y caracterización.</p>
+
+    <div class="chic-player">
+      <button class="play-btn" id="mainPlayBtn" onclick="toggleAudio('demoAudio', 'mainPlayBtn', 'demoProgress', 'demoTime')">▶</button>
+      <div class="track-info">
+        <span class="track-title">Demo Locución — Fernanda Leija</span>
+        <span class="track-sub">Comercial · Institucional · Narrativo</span>
+        <div class="progress-wrap" onclick="seekAudio(event, 'demoAudio', this)">
+          <div class="progress-bar" id="demoProgress"></div>
+        </div>
+      </div>
+      <span class="time-display" id="demoTime">0:00</span>
+      
+      <!-- DEMO DE LOCUCIÓN ACTUALIZADO -->
+      <audio id="demoAudio" src="https://raw.githubusercontent.com/Starf5r/audios-portafolio/main/DEMO-LOCUCION-FER-LEIJA.mp3" ontimeupdate="updateProgress('demoAudio', 'demoProgress', 'demoTime')" onended="resetPlayer('mainPlayBtn', 'demoProgress')"></audio>
+    </div>
+  </section>
+
+  <!-- 2. TARJETAS INTERACTIVAS (AL DAR CLIC ABREN POP-UP CON VIDEOS DENTRO) -->
+  <section class="section-block">
+    <div class="section-header">
+      <div>
+        <span class="eyebrow">Experiencia & Proyectos</span>
+        <h2>Portafolio Audiovisual y Sonoro</h2>
+      </div>
+      <p>Selecciona cada área para reproducir cápsulas, producciones en vivo y material detrás de micrófonos sin salir de esta página.</p>
+    </div>
+
+    <div class="cards-grid">
+      
+      <!-- CARD 1: TELEVISA -->
+      <div class="editorial-card" onclick="openModal('modal-televisa')">
+        <div>
+          <span class="card-tag">TV & Corresponsalía</span>
+          <h3>Televisa Monterrey</h3>
+          <p>Corresponsal en el extranjero desde Corea del Sur y cápsulas especiales para programas de entretenimiento y deportes.</p>
+        </div>
+        <div class="card-cta">Ver cápsulas <span>→</span></div>
+      </div>
+
+      <!-- CARD 2: MULTIMEDIOS -->
+      <div class="editorial-card" onclick="openModal('modal-multimedios')">
+        <div>
+          <span class="card-tag">Conducción en Cámara</span>
+          <h3>TV Multimedios</h3>
+          <p>Conducción de cápsulas turísticas (OrbiTrip), eventos especiales, graduaciones y producciones dinámicas.</p>
+        </div>
+        <div class="card-cta">Ver proyectos <span>→</span></div>
+      </div>
+
+      <!-- CARD 3: OREJUETAS -->
+      <div class="editorial-card" onclick="openModal('modal-orejuetas')">
+        <div>
+          <span class="card-tag">Proyecto Especial · Radio Infantil</span>
+          <h3>Orejuetas</h3>
+          <p>Creación, locución de personajes y producción sonora infantil, incluyendo activaciones en vivo en FIL MTY.</p>
+        </div>
+        <div class="card-cta">Explorar proyecto <span>→</span></div>
+      </div>
+
+      <!-- CARD 4: EVENTOS EN VIVO -->
+      <div class="editorial-card" onclick="openModal('modal-eventos')">
+        <div>
+          <span class="card-tag">Maestra de Ceremonias</span>
+          <h3>Conducción en Vivo</h3>
+          <p>Host en eventos académicos, Open Houses, cátedras y escenarios presenciales con manejo de público en tiempo real.</p>
+        </div>
+        <div class="card-cta">Ver galería <span>→</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. SECCIÓN RADIO & PLAYLIST DE SOUNDCLOUD -->
+  <section class="radio-archive">
+    <div class="radio-text">
+      <span class="eyebrow">Cabina & Programas Pasados</span>
+      <h2>Archivo de Radio: D99 & Radio UDEM</h2>
+      <p>Escucha una selección de mis programas al aire, entrevistas y segmentos musicales. Un recorrido por mi estilo natural, espontáneo y cercano en cabina.</p>
+      <div class="pill-tags">
+        <span class="pill">Locución en Vivo</span>
+        <span class="pill">Entrevistas</span>
+        <span class="pill">Guionismo</span>
+        <span class="pill">Producción Radiofónica</span>
+      </div>
+    </div>
+
+    <div class="soundcloud-frame">
+      <!-- [PEGA AQUÍ EL LINK DE TU PLAYLIST DE SOUNDCLOUD] -->
+      <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" 
+        src="https://w.soundcloud.com/player/?url=https://soundcloud.com/gisselle-leija/sets/weeknd-vibes&color=%23cf97a0&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false">
+      </iframe>
+    </div>
+  </section>
+
+</div>
+
+<!-- =========================================================
+     VENTANAS EMERGENTES (POP-UPS CON VIDEOS INCRUSTADOS)
+     ========================================================= -->
+
+<!-- POP-UP 1: TELEVISA -->
+<div class="modal-overlay" id="modal-televisa" onclick="closeModalOutside(event, 'modal-televisa')">
+  <div class="modal-box">
+    <button class="close-modal" onclick="closeModal('modal-televisa')">✕</button>
+    <span class="eyebrow">Televisa Monterrey</span>
+    <h3>Corresponsalía y Cápsulas de TV</h3>
+    <p class="modal-desc">Producción, guion y conducción de cápsulas culturales y deportivas entrevistando a residentes de Corea del Sur para los programas <em>"Todos en Acción"</em> y <em>"La Fiesta del Fútbol"</em>.</p>
+    
+    <div class="video-grid">
+      <!-- VIDEO 1 -->
+      <div class="video-card">
+        <h4>Cápsula: La Fiesta del Fútbol</h4>
+        <p>Corresponsalía desde Corea del Sur — Entrevistas y ambiente deportivo.</p>
+        <div class="video-wrapper">
+          <!-- [REEMPLAZA 'ID_VIDEO_1' CON EL ID DE TU VIDEO EN DRIVE] -->
+          <iframe src="https://drive.google.com/file/d/1W4r8VaNrPuZ3bz8zehp7_1g3ScS7Y4Yh/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <!-- VIDEO 2 -->
+      <div class="video-card">
+        <h4>Cápsula: Todos en Acción</h4>
+        <p>Reportaje cultural y entrevistas en el extranjero.</p>
+        <div class="video-wrapper">
+          <!-- [REEMPLAZA 'ID_VIDEO_2' CON EL ID DE TU VIDEO EN DRIVE] -->
+          <iframe src="https://drive.google.com/file/d/1xvVXCyJseQLka8SQI5OxRMVHte_G8riq/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POP-UP 2: MULTIMEDIOS -->
+<div class="modal-overlay" id="modal-multimedios" onclick="closeModalOutside(event, 'modal-multimedios')">
+  <div class="modal-box">
+    <button class="close-modal" onclick="closeModal('modal-multimedios')">✕</button>
+    <span class="eyebrow">TV Multimedios</span>
+    <h3>Conducción y Cápsulas OrbiTrip</h3>
+    <p class="modal-desc">Participación como conductora frente a cámara en segmentos de turismo, estilo de vida y reportajes especiales.</p>
+    
+    <div class="video-grid">
+      <div class="video-card">
+        <h4>OrbiTrip — Guanajuato</h4>
+        <p>Conducción turística y recorrido cultural.</p>
+        <div class="video-wrapper">
+          <iframe src="https://drive.google.com/file/d/1y9T7mG3cwTLUKlhW1eE8ZAxUihCoVg8e/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <h4>OrbiTrip — Huasteca Potosina</h4>
+        <p>Cápsula de aventura y turismo de naturaleza.</p>
+        <div class="video-wrapper">
+          <iframe src="https://drive.google.com/file/d/12I--N5_bTx1gwb0CzNhQTi8qId3zipaj/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <h4>OrbiTrip — Los Cabos</h4>
+        <p>Conducción en destino y entrevistas.</p>
+        <div class="video-wrapper">
+          <iframe src="https://drive.google.com/file/d/1mPS3I-VTFe-vq-flqsfjdYUMuHBek1Gi/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <h4>OrbiTrip — Nickelodeon Park</h4>
+        <p>Segmento de entretenimiento familiar.</p>
+        <div class="video-wrapper">
+          <iframe src="https://drive.google.com/file/d/1CMZKyDNU6_e-MtuocjVydChqstABf9Xv/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POP-UP 3: OREJUETAS -->
+<div class="modal-overlay" id="modal-orejuetas" onclick="closeModalOutside(event, 'modal-orejuetas')">
+  <div class="modal-box">
+    <button class="close-modal" onclick="closeModal('modal-orejuetas')">✕</button>
+    <span class="eyebrow">Proyecto Especial · Radio Infantil</span>
+    <h3>Orejuetas</h3>
+    <p class="modal-desc">Iniciativa de radio infantil enfocada en despertar la imaginación y el gusto por la lectura. Participación en diseño creativo, locución narrativa y presencia en vivo durante la Feria Internacional del Libro de Monterrey (FIL MTY).</p>
+    
+    <!-- Reproductor de audio dentro del modal -->
+    <div class="chic-player" style="margin-bottom: 24px;">
+      <button class="play-btn" id="orejuetasPlayBtn" onclick="toggleAudio('orejuetasAudio', 'orejuetasPlayBtn', 'orejuetasProgress', 'orejuetasTime')">▶</button>
+      <div class="track-info">
+        <span class="track-title">Cápsula Infantil — Orejuetas</span>
+        <span class="track-sub">Muestra de narración y caracterización</span>
+        <div class="progress-wrap" onclick="seekAudio(event, 'orejuetasAudio', this)">
+          <div class="progress-bar" id="orejuetasProgress"></div>
+        </div>
+      </div>
+      <span class="time-display" id="orejuetasTime">0:00</span>
+      <!-- [PEGA AQUÍ TU LINK RAW DE GITHUB DE OREJUETAS] -->
+      <audio id="orejuetasAudio" src="https://raw.githubusercontent.com/Starf5r/audios-portafolio/main/CORTINILLA-ENTRADA-OREJUETAS.mp3" ontimeupdate="updateProgress('orejuetasAudio', 'orejuetasProgress', 'orejuetasTime')" onended="resetPlayer('orejuetasPlayBtn', 'orejuetasProgress')"></audio>
+    </div>
+
+<!-- 2. REPRODUCTOR DE EPISODIOS EN SPOTIFY DENTRO DEL POP-UP -->
+    <h4 style="font-size: 18px; margin-bottom: 10px;">Episodios Completos en Spotify</h4>
+    <div style="margin-bottom: 24px; border-radius: 16px; overflow: hidden; border: 1px solid #EAE3E4; box-shadow: 0 8px 24px rgba(207, 151, 160, 0.08);">
+      <iframe style="border-radius:12px" 
+        src="https://open.spotify.com/embed/show/7LSiHikRi631ZevWnzT40s?utm_source=generator" 
+        width="100%" 
+        height="152" 
+        frameBorder="0" 
+        allowfullscreen="" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <!-- Galería de fotos en vivo (puedes subir las fotos a GitHub y usar su link raw) -->
+    <h4 style="font-size: 18px; margin-bottom: 8px;">Activación en Vivo & FIL MTY</h4>
+    <div class="photo-gallery">
+      <img src="https://raw.githubusercontent.com/Starf5r/audios-portafolio/main/OREJUETAS-FIL-MTY.png" alt="Orejuetas en vivo">
+      <img src="https://raw.githubusercontent.com/Starf5r/audios-portafolio/main/OREJUETAS-TEAM.JPG" alt="Stand Orejuetas FIL MTY">
+    </div>
+  </div>
+</div>
+
+<!-- POP-UP 4: EVENTOS EN VIVO (REEL VERTICAL + 3 FOTOS CON DESCRIPCIÓN) -->
+<div class="modal-overlay" id="modal-eventos" onclick="closeModalOutside(event, 'modal-eventos')">
+  <div class="modal-box">
+    <button class="close-modal" onclick="closeModal('modal-eventos')">✕</button>
+    <span class="eyebrow">Escenario & Conducción</span>
+    <h3>Eventos Académicos y Graduaciones</h3>
+    <p class="modal-desc">Conducción protocolaria y dinámica en ceremonias de graduación, Open Houses, cátedras y eventos institucionales en UDEM.</p>
+    
+    <!-- 1. VIDEO VERTICAL (REEL) -->
+    <div class="video-card" style="text-align: center; margin-bottom: 32px;">
+      <h4 style="margin-bottom: 4px;">Conducción en Vivo — Reel Destacado</h4>
+      <p style="margin-bottom: 16px;">Fragmento de participación en escenario.</p>
+      
+      <div style="max-width: 310px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid #EAE3E4; background: #1A1A1A; box-shadow: 0 8px 24px rgba(207, 151, 160, 0.12);">
+        <div style="position: relative; padding-bottom: 177.77%; height: 0; overflow: hidden;">
+          <!-- [PEGA AQUÍ EL ID DE TU VIDEO VERTICAL EN DRIVE] -->
+          <iframe 
+            src="https://drive.google.com/file/d/1e5_JArwsZhYPlEVPH3J00xpJJqOpvrh4/preview" 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
+            allow="autoplay; fullscreen" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. GALERÍA DE 3 EVENTOS CON DESCRIPCIÓN -->
+    <h4 style="font-size: 20px; margin-bottom: 14px; color: var(--text-dark);">Momentos en Escenario</h4>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+      
+      <!-- FOTO 1: OPEN HOUSE -->
+      <div style="background: var(--bg-soft); border: 1px solid var(--border-light); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;">
+        <!-- [PEGA AQUÍ EL LINK RAW DE GITHUB DE ESTA FOTO] -->
+        <img src="https://raw.githubusercontent.com/Starf5r/audios-portafolio/main/OPEN-HOUSE-2024.JPG" alt="Open House UDEM 2024" style="width: 100%; height: 180px; object-fit: cover;">
+        <div style="padding: 14px;">
+          <h5 style="font-family: 'Spectral', serif; font-size: 16px; font-weight: 400; color: var(--text-dark); margin-bottom: 4px;">Open House UDEM 2024</h5>
+          <p style="font-size: 12px; color: var(--text-muted); font-weight: 300; line-height: 1.45;">Conducción principal y animación en vivo recibiendo a futuros estudiantes y familias en campus.</p>
+        </div>
+      </div>
+
+      <!-- FOTO 2: COMMENCEMENT -->
+      <div style="background: var(--bg-soft); border: 1px solid var(--border-light); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;">
+        <!-- [PEGA AQUÍ EL LINK RAW DE GITHUB DE ESTA FOTO] -->
+        <img src="https://raw.githubusercontent.com/Starf5r/audios-portafolio/main/COMMENCEMENT-2023.png" alt="Commencement UDEM Otoño 2023" style="width: 100%; height: 300px; object-fit: cover;">
+        <div style="padding: 14px;">
+          <h5 style="font-family: 'Spectral', serif; font-size: 16px; font-weight: 400; color: var(--text-dark); margin-bottom: 4px;">Commencement Otoño 2023</h5>
+          <p style="font-size: 12px; color: var(--text-muted); font-weight: 300; line-height: 1.45;">Maestra de ceremonias durante la celebración oficial de graduación generacional en UDEM.</p>
+        </div>
+      </div>
+
+      <!-- FOTO 3: CÁTEDRA -->
+      <div style="background: var(--bg-soft); border: 1px solid var(--border-light); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;">
+        <!-- [PEGA AQUÍ EL LINK RAW DE GITHUB DE ESTA FOTO] -->
+        <img src="https://raw.githubusercontent.com/Starf5r/audios-portafolio/main/CATEDRA-2026.png" alt="Cátedra J. L. Garza 2026" style="width: 100%; height: 300px; object-fit: cover;">
+        <div style="padding: 14px;">
+          <h5 style="font-family: 'Spectral', serif; font-size: 16px; font-weight: 400; color: var(--text-dark); margin-bottom: 4px;">Cátedra J. L. Garza 2026</h5>
+          <p style="font-size: 12px; color: var(--text-muted); font-weight: 300; line-height: 1.45;">Conducción protocolaria y presentación de ponentes invitados en encuentro académico institucional.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Control de Pop-ups
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.add('active');
+  }
+
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.remove('active');
+    
+    // Pausa audios si se cierra el modal
+    const audios = modal.querySelectorAll('audio');
+    audios.forEach(a => a.pause());
+
+    // Detiene los videos de Drive/iframes al cerrar el pop-up
+    const iframes = modal.querySelectorAll('iframe');
+    iframes.forEach(iframe => {
+      const currentSrc = iframe.src;
+      iframe.src = currentSrc;
+    });
+  }
+
+  function closeModalOutside(event, id) {
+    if (event.target.id === id) {
+      closeModal(id);
+    }
+  }
+
+  // Control de Reproductores Chic
+  function toggleAudio(audioId, btnId, progressId, timeId) {
+    const audio = document.getElementById(audioId);
+    const btn = document.getElementById(btnId);
+    
+    document.querySelectorAll('audio').forEach(el => {
+      if (el.id !== audioId && !el.paused) {
+        el.pause();
+      }
+    });
+
+    if (audio.paused) {
+      audio.play();
+      btn.textContent = '❚❚';
+    } else {
+      audio.pause();
+      btn.textContent = '▶';
+    }
+  }
+
+  function updateProgress(audioId, progressId, timeId) {
+    const audio = document.getElementById(audioId);
+    const progress = document.getElementById(progressId);
+    const timeDisplay = document.getElementById(timeId);
+    
+    if (audio.duration) {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progress.style.width = percent + '%';
+      
+      const mins = Math.floor(audio.currentTime / 60);
+      const secs = Math.floor(audio.currentTime % 60);
+      timeDisplay.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
+  }
+
+  function seekAudio(event, audioId, wrapper) {
+    const audio = document.getElementById(audioId);
+    if (audio.duration) {
+      const rect = wrapper.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      audio.currentTime = (clickX / rect.width) * audio.duration;
+    }
+  }
+
+  function resetPlayer(btnId, progressId) {
+    document.getElementById(btnId).textContent = '▶';
+    document.getElementById(progressId).style.width = '0%';
+  }
+</script>
+
+</body>
+</html>
